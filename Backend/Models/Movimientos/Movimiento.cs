@@ -25,7 +25,7 @@ namespace Models
         public int Cantidad { get; set; }
 
         [Column("entidad_referencia_id")]
-        public int EntidadReferenciaId { get; set; }
+        public int? EntidadReferenciaId { get; set; }
 
         [Column("fecha")]
         public DateOnly Fecha { get; set; }

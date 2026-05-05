@@ -111,6 +111,132 @@ namespace Controllers
             return Ok(seguimiento);
         }
 
+        [HttpGet("receta/pendientes")]
+        public async Task<IActionResult> GetRecetasPendientes()
+        {
+            var recetas = await (
+                from r in context.Recetas
+                where r.Estado != "Entregado" && r.Estado != "Eliminado"
+                orderby r.FechaSolicitud descending
+                select new RecetaReadDto(
+                    r.Codigo,
+                    r.PacienteCodigo,
+                    "Paciente Wilson consume API",
+                    r.MedicoCodigo,
+                    "Dr. Herberth",
+                    r.FechaSolicitud,
+                    r.Estado,
+                    (
+                        from d in context.DetallesReceta
+                        join m in context.Medicamentos on d.MedicamentoId equals m.Id
+                        join tm in context.TiposMedicamentos on m.MedicamentoId equals tm.Id
+                        join p in context.Posologias on d.Id equals p.DetalleRecetaId
+                        where d.RecetaId == r.Id && d.Estado != "Entregado Total"
+                        select new DetalleRecetaReadDto(
+                            m.Codigo,
+                            tm.NombreGenerico + " (" + tm.NombreComercial + ")",
+                            d.CantidadSolicitada,
+                            d.Estado,
+                            new PosologiaReadDto(
+                                p.Dosis.ToString("N2") + " " + p.UnidadMedida,
+                                p.ViaAdministracion,
+                                "Cada " + p.FrecuenciaValor + " " + p.Frecuencia,
+                                p.Duracion,
+                                p.IndicacionesAdicionales ?? "Sin indicaciones extras"
+                            )
+                        )
+                    ).ToList()
+                )
+            ).ToListAsync();
+
+            return Ok(recetas);
+        }
+
+        [HttpGet("receta/{codigoPaciente}")]
+        public async Task<IActionResult> GetRecetasPorPaciente(string codigoPaciente)
+        {
+            var recetas = await (
+                from r in context.Recetas
+                where r.PacienteCodigo == codigoPaciente && r.Estado != "Eliminado"
+                orderby r.FechaSolicitud descending
+                select new RecetaReadDto(
+                    r.Codigo,
+                    r.PacienteCodigo,
+                    "Paciente Wilson consume API", // Temporal
+                    r.MedicoCodigo,
+                    "Dr. Herberth", // Temporal
+                    r.FechaSolicitud,
+                    r.Estado,
+                    (
+                        from d in context.DetallesReceta
+                        join m in context.Medicamentos on d.MedicamentoId equals m.Id
+                        join tm in context.TiposMedicamentos on m.MedicamentoId equals tm.Id
+                        join p in context.Posologias on d.Id equals p.DetalleRecetaId
+                        where d.RecetaId == r.Id
+                        select new DetalleRecetaReadDto(
+                            m.Codigo,
+                            tm.NombreGenerico + " (" + tm.NombreComercial + ")",
+                            d.CantidadSolicitada,
+                            d.Estado,
+                            new PosologiaReadDto(
+                                p.Dosis.ToString("N2") + " " + p.UnidadMedida,
+                                p.ViaAdministracion,
+                                "Cada " + p.FrecuenciaValor + " " + p.Frecuencia,
+                                p.Duracion,
+                                p.IndicacionesAdicionales ?? "Sin indicaciones extras"
+                            )
+                        )
+                    ).ToList()
+                )
+            ).ToListAsync();
+
+            return Ok(recetas);
+        }
+
+        [HttpGet("receta/{codigoPaciente}/pendientes")]
+        public async Task<IActionResult> GetRecetasPendientesPorPaciente(string codigoPaciente)
+        {
+            var recetas = await (
+                from r in context.Recetas
+                where
+                    r.PacienteCodigo == codigoPaciente
+                    && r.Estado != "Entregado"
+                    && r.Estado != "Eliminado"
+                orderby r.FechaSolicitud descending
+                select new RecetaReadDto(
+                    r.Codigo,
+                    r.PacienteCodigo,
+                    "Paciente Wilson consume API",
+                    r.MedicoCodigo,
+                    "Dr. Herberth",
+                    r.FechaSolicitud,
+                    r.Estado,
+                    (
+                        from d in context.DetallesReceta
+                        join m in context.Medicamentos on d.MedicamentoId equals m.Id
+                        join tm in context.TiposMedicamentos on m.MedicamentoId equals tm.Id
+                        join p in context.Posologias on d.Id equals p.DetalleRecetaId
+                        where d.RecetaId == r.Id && d.Estado != "Entregado Total"
+                        select new DetalleRecetaReadDto(
+                            m.Codigo,
+                            tm.NombreGenerico + " (" + tm.NombreComercial + ")",
+                            d.CantidadSolicitada,
+                            d.Estado,
+                            new PosologiaReadDto(
+                                p.Dosis.ToString("N2") + " " + p.UnidadMedida,
+                                p.ViaAdministracion,
+                                "Cada " + p.FrecuenciaValor + " " + p.Frecuencia,
+                                p.Duracion,
+                                p.IndicacionesAdicionales ?? "Sin indicaciones extras"
+                            )
+                        )
+                    ).ToList()
+                )
+            ).ToListAsync();
+
+            return Ok(recetas);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostReceta(RecetaPostDto receta)
         {

@@ -13,4 +13,23 @@ namespace DTOs
         bool EsControlado,
         bool RequiereRefrigeracion
     );
+
+    public record BajoStockReadDto(
+        string MedicamentoCodigo,
+        string NombreMedicamento,
+        int StockActualTotal,
+        int StockMinimoAlerta,
+        int CantidadFaltante,
+        string NivelUrgencia
+    );
+
+    public record StockPorMedicamentoReadDto(
+        string Codigo,
+        string NombreCompleto,
+        string Concentracion,
+        string Forma,
+        int CantidadDisponible,
+        string Unidad,
+        string Alerta
+    );
 }

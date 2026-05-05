@@ -26,8 +26,20 @@ namespace DTOs
 
     public record DispensacionPostDto(string RecetaCodigo, string FarmaceuticoIdentificador);
 
-    namespace DTOs
-    {
-        public record DispensacionEnfermeriaDto(string RecetaCodigo, string EnfermeraCodigo);
-    }
+    public record DispensacionEnfermeriaDto(string RecetaCodigo, string EnfermeraCodigo);
+
+    public record DispensacionPorFarmaceuticoReadDto(
+        string DispensacionCodigo,
+        string RecetaCodigo,
+        string PacienteNombre,
+        DateOnly Fecha,
+        string Estado,
+        List<ItemEntregadoReadDto> ItemsEntregados
+    );
+
+    public record ItemEntregadoReadDto(
+        string MedicamentoNombre,
+        string LoteCodigo,
+        int CantidadEntregada
+    );
 }

@@ -1,6 +1,5 @@
 using Data;
 using DTOs;
-using DTOs.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -256,6 +255,47 @@ namespace Controllers
                 await transaction.RollbackAsync();
                 return BadRequest($"Error en el proceso de despacho: {ex.Message}");
             }
+        }
+
+        [HttpGet("farmaceutico/{codigoFarmaceutico}")]
+        public async Task<IActionResult> GetDispensacionesPorFarmaceutico(string codigoFarmaceutico)
+        {
+            var historial = await (
+                from d in context.Dispensaciones
+                join r in context.Recetas on d.RecetaId equals r.Id
+                where d.FarmaceuticoCodigo == codigoFarmaceutico && d.Estado != "Eliminado"
+                orderby d.Fecha descending
+                select new DispensacionPorFarmaceuticoReadDto(
+                    d.Codigo,
+                    r.Codigo,
+                    "Paciente Wilson consume API",
+                    d.Fecha,
+                    d.Estado,
+                    (
+                        from dl in context.DispensacionesLote
+                        join sa in context.StocksActuales on dl.StockActualId equals sa.Id
+                        join lot in context.Lotes on sa.LoteId equals lot.Id
+                        join med in context.Medicamentos on lot.MedicamentoId equals med.Id
+                        join tmed in context.TiposMedicamentos on med.MedicamentoId equals tmed.Id
+                        where dl.DispensacionId == d.Id
+                        select new ItemEntregadoReadDto(
+                            tmed.NombreGenerico + " (" + tmed.NombreComercial + ")",
+                            lot.Codigo,
+                            dl.CantidadEntregada
+                        )
+                    ).ToList()
+                )
+            ).ToListAsync();
+
+            if (historial.Count == 0)
+                return NotFound(
+                    new
+                    {
+                        mensaje = $"No se encontraron dispensaciones registradas por el farmacéutico {codigoFarmaceutico}",
+                    }
+                );
+
+            return Ok(historial);
         }
     }
 }
