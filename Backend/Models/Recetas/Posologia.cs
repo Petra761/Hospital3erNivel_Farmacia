@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Models
 {
-    [Table("posologia")]
-    public class Posologia
+    [Table("posologias")]    public class Posologia
     {
         [Key]
         [Column("id")]
@@ -17,11 +16,11 @@ namespace Models
         [Column("detalle_receta_id")]
         public int DetalleRecetaId { get; set; }
 
-        [Column("dosis", TypeName = "decimal(18,2)")]
+        [Column("dosis")]
         public decimal Dosis { get; set; }
 
-        [Column("unidad_id")]
-        public int UnidadId { get; set; }
+        [Column("unidad_medida")]
+        public string UnidadMedida { get; set; }
 
         [Column("via_administracion")]
         public string ViaAdministracion { get; set; }
@@ -41,13 +40,8 @@ namespace Models
         [Column("estado")]
         public string Estado { get; set; }
 
-        // Relaciones
         [ForeignKey("DetalleRecetaId")]
         [JsonIgnore]
         public DetalleReceta DetalleReceta { get; set; }
-
-        [ForeignKey("UnidadId")]
-        [JsonIgnore]
-        public TipoUnidadMedida TipoUnidadMedida { get; set; }
     }
 }

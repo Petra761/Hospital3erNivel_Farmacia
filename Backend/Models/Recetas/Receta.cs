@@ -29,5 +29,8 @@ namespace Models
 
         [JsonIgnore]
         public ICollection<DetalleReceta> Detalles { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Dispensacion> Dispensaciones { get; set; }
     }
 }

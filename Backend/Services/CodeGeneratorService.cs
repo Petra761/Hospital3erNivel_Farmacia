@@ -47,6 +47,26 @@ namespace Services
             return $"RCP-{timestamp}-{aleatorio}".ToUpper();
         }
 
+        public static string GenerateRecetaCode()
+        {
+            string timestamp = DateTime.Now.ToString("yyMMdd");
+            string aleatorio = GenerateRandomAlphanumeric(4);
+            return $"RCT-{timestamp}-{aleatorio}".ToUpper();
+        }
+
+        public static string GeneratePosologiaCode()
+        {
+            string aleatorio = GenerateRandomAlphanumeric(6);
+            return $"POS-{aleatorio}".ToUpper();
+        }
+
+        public static string GenerateDispensacionCode()
+        {
+            string timestamp = DateTime.Now.ToString("yyMMdd");
+            string aleatorio = GenerateRandomAlphanumeric(4);
+            return $"DSP-{timestamp}-{aleatorio}".ToUpper();
+        }
+
         private static string GetCleanChars(string text, int length)
         {
             if (string.IsNullOrEmpty(text))

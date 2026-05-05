@@ -4,37 +4,37 @@ using System.Text.Json.Serialization;
 
 namespace Models
 {
-    [Table("detalle_receta")]
-    public class DetalleReceta
+    [Table("dispensacion")]
+    public class Dispensacion
     {
         [Key]
         [Column("id")]
         public int Id { get; set; }
 
+        [Column("codigo")]
+        public string Codigo { get; set; }
+
         [Column("receta_id")]
         public int RecetaId { get; set; }
 
-        [Column("medicamento_id")]
-        public int MedicamentoId { get; set; }
+        [Column("farmaceutico_codigo")]
+        public string FarmaceuticoCodigo { get; set; }
 
-        [Column("cantidad_solicitada")]
-        public int CantidadSolicitada { get; set; }
+        [Column("quien_recoge")]
+        public string? QuienRecoge { get; set; }
+
+        [Column("fecha")]
+        public DateOnly Fecha { get; set; }
 
         [Column("estado")]
         public string Estado { get; set; }
 
+        // Relaciones
         [ForeignKey("RecetaId")]
         [JsonIgnore]
         public Receta Receta { get; set; }
 
-        [ForeignKey("MedicamentoId")]
         [JsonIgnore]
-        public Medicamento Medicamento { get; set; }
-
-        [JsonIgnore]
-        public Posologia Posologia { get; set; }
-
-        [JsonIgnore]
-        public ICollection<DispensacionLote> DispensacionesLote { get; set; }
+        public ICollection<DispensacionLote> DispensacionLotes { get; set; }
     }
 }

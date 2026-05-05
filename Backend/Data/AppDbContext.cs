@@ -25,11 +25,14 @@ namespace Data
         public DbSet<Lote> Lotes { get; set; }
         public DbSet<StockActual> StocksActuales { get; set; }
 
-        // --- GRUPO 5: RECETAS Y POSOLOGÍA (Demanda Médica) ---
-        /* Se agregarán: Receta, DetalleReceta, Posologia */
+        // --- GRUPO 5: RECETAS Y POSOLOGÍA ---
+        public DbSet<Receta> Recetas { get; set; }
+        public DbSet<DetalleReceta> DetallesReceta { get; set; }
+        public DbSet<Posologia> Posologias { get; set; }
 
-        // --- GRUPO 6: DISPENSACIÓN (Salidas de Farmacia) ---
-        /* Se agregarán: Dispensacion, DispensacionLote */
+        // --- GRUPO 6: DESPACHO ---
+        public DbSet<Dispensacion> Dispensaciones { get; set; }
+        public DbSet<DispensacionLote> DispensacionesLote { get; set; }
 
         // --- GRUPO 7: AUDITORÍA (Kardex) ---
         public DbSet<TipoMovimiento> TiposMovimientos { get; set; }

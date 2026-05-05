@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260504235036_v3")]
+    partial class v3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,10 +395,9 @@ namespace Backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("indicaciones_adicionales");
 
-                    b.Property<string>("UnidadMedida")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("unidad_medida");
+                    b.Property<int>("UnidadId")
+                        .HasColumnType("integer")
+                        .HasColumnName("unidad_id");
 
                     b.Property<string>("ViaAdministracion")
                         .IsRequired()
@@ -406,6 +408,8 @@ namespace Backend.Migrations
 
                     b.HasIndex("DetalleRecetaId")
                         .IsUnique();
+
+                    b.HasIndex("UnidadId");
 
                     b.ToTable("posologias");
                 });
@@ -797,7 +801,15 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.TipoUnidadMedida", "TipoUnidadMedida")
+                        .WithMany()
+                        .HasForeignKey("UnidadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("DetalleReceta");
+
+                    b.Navigation("TipoUnidadMedida");
                 });
 
             modelBuilder.Entity("Models.StockActual", b =>
