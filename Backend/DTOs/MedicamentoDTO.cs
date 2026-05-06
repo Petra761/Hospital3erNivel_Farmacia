@@ -30,22 +30,19 @@ namespace DTOs
         string PromedioPorReceta
     );
 
-    namespace DTOs
-    {
-        public record KardexMedicamentoReadDto(
-            string MedicamentoCodigo,
-            string MedicamentoNombre,
-            int StockTotalActual,
-            List<MovimientoKardexDto> Historial
-        );
+    public record KardexMedicamentoReadDto(
+        string MedicamentoCodigo,
+        string MedicamentoNombre,
+        int StockTotalActual,
+        List<MovimientoKardexDto> Historial
+    );
 
-        public record MovimientoKardexDto(
-            string Fecha,
-            string TipoMovimiento,
-            string LoteCodigo,
-            int Cantidad,
-            string Signo,
-            string ReferenciaCodigo
-        );
-    }
+    public record MovimientoKardexDto(
+        string Fecha,
+        string TipoMovimiento,
+        string LoteCodigo,
+        int Cantidad,
+        string Signo,
+        string ReferenciaCodigo
+    );
 }
