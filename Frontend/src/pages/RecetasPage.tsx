@@ -2,7 +2,7 @@ import { useRecetas } from "../hooks/useRecetas";
 import { RecetaRow } from "../componets/RecetaRow";
 
 export default function RecetasPage() {
-  const { recetas, loading, error } = useRecetas();
+  const { recetas, loading } = useRecetas();
 
   return (
     <main className="max-w-[1440px] mx-auto px-container-padding py-stack-lg">
